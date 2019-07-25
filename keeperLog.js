@@ -1,11 +1,16 @@
 const express = require("express");
 const app = express();
-app.use(express.json());
+app.use(express.json({ type: "*/*" }));
 
 let logs = [];
 
-app.get("/log/send", function(req, res) {
-  logs.push(req.query.text);
+app.use("/log/send", function(req, res) {
+  console.log(req.body);
+  if (req.query.text) {
+    logs.push(req.query.text);
+  } else if (req.body.text) {
+    logs.push(req.body.text);
+  }
   res.send(logs);
 });
 
